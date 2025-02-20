@@ -38,7 +38,7 @@ async def new_game(client: Client, message: Message):
     
     if chat_id not in group_games:
         word_to_guess = start_new_game()
-        group_games[chat_id] = {"word": word_to_guess, "players": {}}
+        group_games[chat_id] = {"word": word_to_guess, "history": []}
         await message.reply("A new game has started! Guess a 5-letter word.")
     else:
         await message.reply("A game is already running! Keep guessing.")
@@ -47,7 +47,6 @@ async def new_game(client: Client, message: Message):
 @app.on_message(filters.text & ~filters.command("new"))
 async def guess_word(client: Client, message: Message):
     chat_id = message.chat.id
-    user_id = message.from_user.id
     
     if chat_id not in group_games:
         await message.reply("No active game. Type /new to start.")
@@ -61,13 +60,10 @@ async def guess_word(client: Client, message: Message):
 
     feedback = check_guess(guess, word_to_guess)
     
-    # Store the player's guess history
-    if user_id not in group_games[chat_id]["players"]:
-        group_games[chat_id]["players"][user_id] = []
-    group_games[chat_id]["players"][user_id].append(feedback)
+    # Store the group's guess history
+    group_games[chat_id]["history"].append(f"{guess.upper()} - {feedback}")
+    guess_history = "\n".join(group_games[chat_id]["history"])
     
-    # Display the player's previous guesses as blocks only
-    guess_history = "\n".join(group_games[chat_id]["players"][user_id])
     await message.reply(guess_history)
     
     # If the player guessed correctly, end the game
