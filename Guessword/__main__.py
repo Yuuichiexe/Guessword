@@ -25,7 +25,7 @@ global_scores = {}  # Stores scores globally
 # Bot credentials
 API_ID = "20222660"
 API_HASH = "5788f1f4a93f2de28835a0cf1b0ebae4"
-BOT_TOKEN = "YOUR_BOT_TOKEN"
+BOT_TOKEN = "7560532835:AAE5yA7zLwHrkJQK0VYeGeCR-Db6Jhqzvpo"
 
 app = Client("word_guess_bot", bot_token=BOT_TOKEN, api_id=API_ID, api_hash=API_HASH)
 
