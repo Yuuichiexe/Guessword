@@ -1,14 +1,21 @@
 import random
 from pyrogram import Client, filters
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
+import requests
 
-# Word lists based on length
+# Function to fetch words of a given length from Datamuse API
+def fetch_words(word_length, max_words=1000):
+    response = requests.get(f"https://api.datamuse.com/words?sp={'?' * word_length}&max={max_words}")
+    return [word["word"] for word in response.json()]
+
+# Fetch words for different lengths
 word_lists = {
-    4: [...],  # Your full list of 4-letter words
-    5: [...],  # Your full list of 5-letter words
-    6: [...],  # Your full list of 6-letter words
-    7: [...],  # Your full list of 7-letter words
+    4: fetch_words(4),
+    5: fetch_words(5),
+    6: fetch_words(6),
+    7: fetch_words(7),
 }
+
 
 # Dictionary to store ongoing games for groups
 group_games = {}
