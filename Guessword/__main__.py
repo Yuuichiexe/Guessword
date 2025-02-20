@@ -1,8 +1,10 @@
+Dealwine~:
 import random
 import os
 import requests
 from pyrogram import Client, filters
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
+from database import update_global_score, update_chat_score, get_global_leaderboard, get_chat_leaderboard
 
 # Fallback words in case the API fails
 fallback_words = {
@@ -27,13 +29,11 @@ word_lists = {length: fetch_words(length) for length in fallback_words}
 
 # Game data storage
 group_games = {}
-group_scores = {}
-global_scores = {}
 
 # Bot credentials
 API_ID = int(os.getenv("API_ID", "20222660"))
 API_HASH = os.getenv("API_HASH", "5788f1f4a93f2de28835a0cf1b0ebae4")
-BOT_TOKEN = os.getenv("BOT_TOKEN", "7560532835:AAE5yA7zLwHrkJQK0VYeGeCR-Db6Jhqzvpo")
+BOT_TOKEN = os.getenv("BOT_TOKEN", "YOUR_BOT_TOKEN_HERE")
 
 app = Client("word_guess_bot", bot_token=BOT_TOKEN, api_id=API_ID, api_hash=API_HASH)
 
@@ -74,11 +74,6 @@ def check_guess(guess, word_to_guess):
 @app.on_message(filters.command("new"))
 async def new_game(client: Client, message: Message):
     chat_id = message.chat.id
-
-    # Ensure the group has a score entry before starting a new game
-    if chat_id not in group_scores:
-        group_scores[chat_id] = {}
-        
     buttons = [[InlineKeyboardButton(f"{i} Letters", callback_data=f"start_{i}")] for i in range(4, 8)]
     await message.reply("Choose a word length to start the game:", reply_markup=InlineKeyboardMarkup(buttons))
 
@@ -92,7 +87,6 @@ async def select_word_length(client, callback_query):
     group_games[chat_id] = {"word": word_to_guess, "history": [], "used_words": set()}
     
     await callback_query.message.edit_text(f"A new {word_length}-letter game has started! Guess a word.")
-
 
 @app.on_message(filters.text & ~filters.command(["new", "leaderboard", "chatleaderboard"]))
 async def guess_word(client: Client, message: Message):
@@ -118,7 +112,7 @@ async def guess_word(client: Client, message: Message):
         await message.reply(f"🔄 {user_name}, you already used this word! Try a different one.")
         return
 
-    group_games[chat_id]["used_words"].add(guess)
+group_games[chat_id]["used_words"].add(guess)
     feedback = check_guess(guess, word_to_guess)
     
     group_games[chat_id]["history"].append(f"{feedback} → {guess.upper()}")
@@ -127,55 +121,29 @@ async def guess_word(client: Client, message: Message):
     await message.reply(guess_history)
 
     if guess == word_to_guess:
-        group_scores.setdefault(chat_id, {}).setdefault(user_id, 0)
-        global_scores.setdefault(user_id, 0)
-        
-        group_scores[chat_id][user_id] += 1
-        global_scores[user_id] += 1
+        update_chat_score(chat_id, user_id)
+        update_global_score(user_id)
         
         del group_games[chat_id]
         
-        await message.reply(f"🎉 {user_name} guessed the word correctly! The word was {word_to_guess.upper()} 🎉\n"
-                            f"🏆 Group Score: {group_scores[chat_id][user_id]}\n"
-                            f"🌍 Global Score: {global_scores[user_id]}")
-
+        await message.reply(f"🎉 {user_name} guessed the word correctly! The word was {word_to_guess.upper()} 🎉")
 
 @app.on_message(filters.command("leaderboard"))
 async def leaderboard(client: Client, message: Message):
-    if not global_scores:
+    leaderboard = get_global_leaderboard()
+    if not leaderboard:
         await message.reply("No scores recorded yet.")
         return
-
-    leaderboard_text = "🌍 **Global Leaderboard:**\n"
-    sorted_scores = sorted(global_scores.items(), key=lambda x: x[1], reverse=True)
-
-    for rank, (user_id, score) in enumerate(sorted_scores, start=1):
-        leaderboard_text += f"**{rank}.** User {user_id} → {score} points\n"
-
-    print(f"Global Leaderboard Retrieved: {global_scores}")  # Debugging print
-    await message.reply(leaderboard_text)
-
+    text = "🌍 Global Leaderboard:\n" + "\n".join([f"User {user_id} → {score} points" for user_id, score in leaderboard])
+    await message.reply(text)
 
 @app.on_message(filters.command("chatleaderboard"))
 async def chat_leaderboard(client: Client, message: Message):
-    chat_id = message.chat.id
-
-    # Ensure the group chat has a score entry before checking leaderboard
-    if chat_id not in group_scores:
-        group_scores[chat_id] = {}  # Initialize empty scores
-
-    if not group_scores[chat_id]:
+    leaderboard = get_chat_leaderboard(message.chat.id)
+    if not leaderboard:
         await message.reply("No scores recorded in this chat yet.")
         return
-
-    leaderboard_text = "🏆 **Chat Leaderboard:**\n"
-    sorted_scores = sorted(group_scores[chat_id].items(), key=lambda x: x[1], reverse=True)
-
-    for rank, (user_id, score) in enumerate(sorted_scores, start=1):
-        leaderboard_text += f"**{rank}.** User {user_id} → {score} points\n"
-
-    print(f"Chat Leaderboard Retrieved for {chat_id}: {group_scores[chat_id]}")  # Debugging print
-    await message.reply(leaderboard_text)
-
+    text = "🏆 Chat Leaderboard:\n" + "\n".join([f"User {user_id} → {score} points" for user_id, score in leaderboard])
+    await message.reply(text)
 
 app.run()
