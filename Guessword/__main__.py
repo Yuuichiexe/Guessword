@@ -74,6 +74,11 @@ def check_guess(guess, word_to_guess):
 @app.on_message(filters.command("new"))
 async def new_game(client: Client, message: Message):
     chat_id = message.chat.id
+
+    # Ensure the group has a score entry before starting a new game
+    if chat_id not in group_scores:
+        group_scores[chat_id] = {}
+        
     buttons = [[InlineKeyboardButton(f"{i} Letters", callback_data=f"start_{i}")] for i in range(4, 8)]
     await message.reply("Choose a word length to start the game:", reply_markup=InlineKeyboardMarkup(buttons))
 
@@ -136,30 +141,39 @@ async def guess_word(client: Client, message: Message):
 
 @app.on_message(filters.command("leaderboard"))
 async def leaderboard(client: Client, message: Message):
-    if not global_scores or all(score == 0 for score in global_scores.values()):
+    if not global_scores:
         await message.reply("No scores recorded yet.")
         return
 
-    sorted_scores = sorted(global_scores.items(), key=lambda x: x[1], reverse=True)
     leaderboard_text = "🌍 **Global Leaderboard:**\n"
+    sorted_scores = sorted(global_scores.items(), key=lambda x: x[1], reverse=True)
+
     for rank, (user_id, score) in enumerate(sorted_scores, start=1):
         leaderboard_text += f"**{rank}.** User {user_id} → {score} points\n"
 
+    print(f"Global Leaderboard Retrieved: {global_scores}")  # Debugging print
     await message.reply(leaderboard_text)
+
 
 @app.on_message(filters.command("chatleaderboard"))
 async def chat_leaderboard(client: Client, message: Message):
     chat_id = message.chat.id
 
-    if chat_id not in group_scores or not any(score > 0 for score in group_scores[chat_id].values()):
+    # Ensure the group chat has a score entry before checking leaderboard
+    if chat_id not in group_scores:
+        group_scores[chat_id] = {}  # Initialize empty scores
+
+    if not group_scores[chat_id]:
         await message.reply("No scores recorded in this chat yet.")
         return
 
-    sorted_scores = sorted(group_scores[chat_id].items(), key=lambda x: x[1], reverse=True)
     leaderboard_text = "🏆 **Chat Leaderboard:**\n"
+    sorted_scores = sorted(group_scores[chat_id].items(), key=lambda x: x[1], reverse=True)
+
     for rank, (user_id, score) in enumerate(sorted_scores, start=1):
         leaderboard_text += f"**{rank}.** User {user_id} → {score} points\n"
 
+    print(f"Chat Leaderboard Retrieved for {chat_id}: {group_scores[chat_id]}")  # Debugging print
     await message.reply(leaderboard_text)
 
 
