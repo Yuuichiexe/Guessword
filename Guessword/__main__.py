@@ -93,7 +93,8 @@ async def select_word_length(client, callback_query):
     
     await callback_query.message.edit_text(f"A new {word_length}-letter game has started! Guess a word.")
 
-@app.on_message(filters.text)
+
+@app.on_message(filters.text & ~filters.command(["new", "leaderboard", "chatleaderboard"]))
 async def guess_word(client: Client, message: Message):
     chat_id = message.chat.id
     user_id = message.from_user.id
@@ -137,7 +138,7 @@ async def guess_word(client: Client, message: Message):
         await message.reply(f"🎉 {user_name} guessed the word correctly! The word was {word_to_guess.upper()} 🎉\n"
                             f"🏆 Group Score: {group_scores[chat_id][user_id]}\n"
                             f"🌍 Global Score: {global_scores[user_id]}")
-        
+
 
 @app.on_message(filters.command("leaderboard"))
 async def leaderboard(client: Client, message: Message):
