@@ -99,7 +99,7 @@ async def guess_word(client: Client, message: Message):
         return
 
     word_to_guess = group_games[chat_id]["word"]
-    guess = message.text.strip().upper()
+    guess = message.text.strip().lower()
 
     if len(guess) != len(word_to_guess):
         return  
