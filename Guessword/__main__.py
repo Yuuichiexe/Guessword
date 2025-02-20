@@ -112,7 +112,7 @@ async def guess_word(client: Client, message: Message):
         await message.reply(f"🎉 {user_name} guessed the word correctly! The word was {word_to_guess} 🎉\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯\n🏆 Group Score: {group_scores[chat_id][user_id]}\n🌍 Global Score: {global_scores[user_id]}")
 
 # Show group leaderboard
-@app.on_message(filters.command("group_leaderboard"))
+@app.on_message(filters.command("chatleaderboard"))
 async def group_leaderboard(client: Client, message: Message):
     chat_id = message.chat.id
     
@@ -124,7 +124,7 @@ async def group_leaderboard(client: Client, message: Message):
     await message.reply(leaderboard)
 
 # Show global leaderboard
-@app.on_message(filters.command("global_leaderboard"))
+@app.on_message(filters.command("leaderboard"))
 async def global_leaderboard(client: Client, message: Message):
     if not global_scores:
         await message.reply("No global scores recorded yet.")
