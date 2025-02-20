@@ -4,10 +4,10 @@ from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 
 # Word lists based on length
 word_lists = {
-    4: ["pear", "lime", "kiwi", "figs"],
-    5: ["apple", "grape", "melon", "peach", "plums", "mango", "berry", "lemon"],
-    6: ["banana", "orange", "tomato", "carrot"],
-    7: ["pumpkin", "avocado", "spinach", "broccoli"]
+    4: ["pear", "lime", "kiwi", "figs", "blue", "palm", "corn", "salt", "fish", "bark", "milk", "gold", "iron", "leaf", "dust", "rose", "star", "moon", "mars", "coal", "vine", "wind", "seed", "root", "flax", "wool", "wave", "beet", "toad", "fern", "reed", "rice", "lily", "foam", "ruby", "opal", "zinc", "tide", "sand", "snow", "haze", "mist", "echo", "lava", "silt", "clay", "lead", "bron", "acme", "crux", "limb", "husk", "twig", "raze", "zest", "loam", "moss", "peat", "plow", "spur", "cane", "hail", "dune", "vibe", "flux", "fume", "grit", "jade", "mule", "opal", "perch", "quilt", "silk", "twine"],
+    5: ["apple", "grape", "melon", "peach", "plums", "mango", "berry", "lemon", "chess", "brick", "sword", "glass", "sugar", "cloud", "storm", "river", "plain", "ocean", "music", "torch", "flame", "quilt", "beach", "zebra", "dwarf", "smoke", "grape", "slate", "marsh", "chime", "quark", "plume", "brisk", "fable", "linen", "wheat", "spine", "flint", "charm", "thorn", "swirl", "ranch", "bison", "clove", "vivid", "glyph", "frost", "chest", "drift", "bloom", "steed", "fjord", "quake", "spurt", "prism", "scarf", "vexed", "brink", "froze", "creek", "fizzy", "skunk", "pouch", "badge", "glint", "brood", "quest", "fluke", "crisp", "shard", "plush", "dwell", "vigor", "whisk", "flair"],
+    6: ["banana", "orange", "tomato", "carrot", "cheese", "breeze", "forest", "desert", "canyon", "beacon", "flight", "pillar", "castle", "shadow", "lantern", "ripple", "pebble", "marble", "zigzag", "brandy", "whisky", "sandal", "cactus", "rocket", "carpet", "purple", "violet", "tundra", "relief", "thrift", "plunge", "glisten", "zephyr", "coarse", "mellow", "jungle", "tropic", "glider", "warble", "prance", "ransom", "beacon", "sizzle", "piston", "cradle", "wisped", "luster", "spigot", "jester", "freeze", "plated", "ranger", "guzzle", "jumble", "kettle", "mingle", "dazzle", "nibble", "blithe", "quiver", "throat", "murmur", "scurry", "puzzle", "jumper", "tangle", "wholly", "gossip", "morsel", "brisket", "cuddle", "snappy", "cranky", "whizzy"],
+    7: ["pumpkin", "avocado", "spinach", "broccoli", "lantern", "chimney", "warrior", "buffalo", "diamond", "emerald", "curtain", "sunrise", "monarch", "horizon", "pioneer", "whisper", "cushion", "glimmer", "twinkle", "stencil", "passion", "gingham", "glacier", "granite", "journey", "whiskey", "quilted", "victory", "torpedo", "symphon", "vortex", "blazing", "curtain", "phoenix", "twisted", "tundras", "skylark", "rooster", "nostalg", "justice", "harmony", "pulsate", "spectra", "scaling", "balloon", "mystery", "arizona", "morning", "orchard", "plutoid", "vintage", "jeopard", "wrinkle", "seismic", "zealous", "stealth", "flicker", "chateau", "clovera", "horizon", "painter", "ballast", "paradox", "neptune", "quicken", "sunbeam", "warlock", "vividly", "radiate", "furnace", "blossom", "banquet", "cypress", "glisten", "bizarre", "sunfish", "torment"]
 }
 
 # Dictionary to store ongoing games for groups
@@ -109,7 +109,7 @@ async def guess_word(client: Client, message: Message):
         
         del group_games[chat_id]
         
-        await message.reply(f"🎉 {user_name} guessed the word correctly! The word was {word_to_guess} 🎉\n\n🏆 Group Score: {group_scores[chat_id][user_id]}\n🌍 Global Score: {global_scores[user_id]}")
+        await message.reply(f"🎉 {user_name} guessed the word correctly! The word was {word_to_guess} 🎉\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯\n🏆 Group Score: {group_scores[chat_id][user_id]}\n🌍 Global Score: {global_scores[user_id]}")
 
 # Show group leaderboard
 @app.on_message(filters.command("group_leaderboard"))
