@@ -4,7 +4,7 @@ from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 import requests
 
 # Function to fetch words of a given length from Datamuse API
-def fetch_words(word_length, max_words=1000):
+def fetch_words(word_length, max_words=80000):
     response = requests.get(f"https://api.datamuse.com/words?sp={'?' * word_length}&max={max_words}")
     return [word["word"] for word in response.json()]
 
@@ -116,7 +116,7 @@ async def guess_word(client: Client, message: Message):
     feedback = check_guess(guess, word_to_guess)
     
     # Store the group's guess history
-    group_games[chat_id]["history"].append(f"{user_name}: {guess} → {feedback}")
+    group_games[chat_id]["history"].append(f"{feedback} → {guess}")
     guess_history = "\n".join(group_games[chat_id]["history"])
     
     await message.reply(guess_history)
