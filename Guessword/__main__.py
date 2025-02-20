@@ -93,7 +93,7 @@ async def select_word_length(client, callback_query):
     
     await callback_query.message.edit_text(f"A new {word_length}-letter game has started! Guess a word.")
 
-@app.on_message(filters.text & ~filters.command("new"))
+@app.on_message(filters.text)
 async def guess_word(client: Client, message: Message):
     chat_id = message.chat.id
     user_id = message.from_user.id
