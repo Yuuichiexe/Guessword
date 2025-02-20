@@ -47,6 +47,16 @@ app = Client("word_guess_bot", bot_token=BOT_TOKEN, api_id=API_ID, api_hash=API_
 def start_new_game(word_length):
     return random.choice(word_lists[word_length])
 
+# Function to check if a word is in the English dictionary
+def is_valid_english_word(word):
+    try:
+        response = requests.get(f"https://api.datamuse.com/words?sp={word}&max=1")
+        response.raise_for_status()
+        words = [w["word"] for w in response.json()]
+        return word in words
+    except requests.RequestException:
+        return False
+
 # Function to check the user's guess
 def check_guess(guess, word_to_guess):
     feedback = []
@@ -106,13 +116,13 @@ async def guess_word(client: Client, message: Message):
         return
 
     word_to_guess = group_games[chat_id]["word"]
-    guess = message.text.strip().upper()
+    guess = message.text.strip().lower()
 
     if len(guess) != len(word_to_guess):
         return  
 
-    if guess not in word_lists[len(word_to_guess)]:
-        await message.reply(f"❌ {user_name}, this word is not in my dictionary. Try another one!")
+    if not is_valid_english_word(guess):
+        await message.reply(f"❌ {user_name}, this word is not in the English dictionary. Try another one!")
         return
 
     if guess in group_games[chat_id]["used_words"]:
@@ -139,36 +149,6 @@ async def guess_word(client: Client, message: Message):
         await message.reply(f"🎉 {user_name} guessed the word correctly! The word was {word_to_guess} 🎉\n"
                             f"🏆 Group Score: {group_scores[chat_id].get(user_id, 0)}\n"
                             f"🌍 Global Score: {global_scores[user_id]}")
-
-# Show group leaderboard
-@app.on_message(filters.command("chatleaderboard"))
-async def group_leaderboard(client: Client, message: Message):
-    chat_id = message.chat.id
-    
-    if chat_id not in group_scores or not group_scores[chat_id]:
-        await message.reply("No scores recorded for this group yet.")
-        return
-    
-    leaderboard = "🏆 Group Leaderboard:\n"
-    for user_id, score in sorted(group_scores[chat_id].items(), key=lambda x: x[1], reverse=True):
-        user = await client.get_users(user_id)
-        leaderboard += f"{user.first_name} ({user_id}): {score}\n"
-
-    await message.reply(leaderboard)
-
-# Show global leaderboard
-@app.on_message(filters.command("leaderboard"))
-async def global_leaderboard(client: Client, message: Message):
-    if not global_scores:
-        await message.reply("No global scores recorded yet.")
-        return
-    
-    leaderboard = "🌍 Global Leaderboard:\n"
-    for user_id, score in sorted(global_scores.items(), key=lambda x: x[1], reverse=True):
-        user = await client.get_users(user_id)
-        leaderboard += f"{user.first_name} ({user_id}): {score}\n"
-
-    await message.reply(leaderboard)
 
 # Run the bot
 app.run()
