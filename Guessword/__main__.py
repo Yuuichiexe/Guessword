@@ -1,4 +1,3 @@
-Dealwine~:
 import random
 import os
 import requests
@@ -33,7 +32,7 @@ group_games = {}
 # Bot credentials
 API_ID = int(os.getenv("API_ID", "20222660"))
 API_HASH = os.getenv("API_HASH", "5788f1f4a93f2de28835a0cf1b0ebae4")
-BOT_TOKEN = os.getenv("BOT_TOKEN", "YOUR_BOT_TOKEN_HERE")
+BOT_TOKEN = os.getenv("BOT_TOKEN", "7560532835:AAE5yA7zLwHrkJQK0VYeGeCR-Db6Jhqzvpo")
 
 app = Client("word_guess_bot", bot_token=BOT_TOKEN, api_id=API_ID, api_hash=API_HASH)
 
@@ -112,7 +111,7 @@ async def guess_word(client: Client, message: Message):
         await message.reply(f"🔄 {user_name}, you already used this word! Try a different one.")
         return
 
-group_games[chat_id]["used_words"].add(guess)
+    group_games[chat_id]["used_words"].add(guess)
     feedback = check_guess(guess, word_to_guess)
     
     group_games[chat_id]["history"].append(f"{feedback} → {guess.upper()}")
