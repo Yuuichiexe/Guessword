@@ -99,7 +99,7 @@ async def guess_word(client: Client, message: Message):
         return
 
     word_to_guess = group_games[chat_id]["word"]
-    guess = message.text.strip().lower()
+    guess = message.text.strip().upper()
 
     if len(guess) != len(word_to_guess):
         return  
@@ -132,24 +132,35 @@ async def guess_word(client: Client, message: Message):
         await message.reply(f"🎉 {user_name} guessed the word correctly! The word was {word_to_guess.upper()} 🎉\n"
                             f"🏆 Group Score: {group_scores[chat_id][user_id]}\n"
                             f"🌍 Global Score: {global_scores[user_id]}")
+        
 
 @app.on_message(filters.command("leaderboard"))
 async def leaderboard(client: Client, message: Message):
-    if not global_scores:
+    if not global_scores or all(score == 0 for score in global_scores.values()):
         await message.reply("No scores recorded yet.")
         return
-    leaderboard_text = "🌍 Global Leaderboard:\n" + "\n".join(
-        [f"{user_id}: {score}" for user_id, score in sorted(global_scores.items(), key=lambda x: x[1], reverse=True)])
+
+    sorted_scores = sorted(global_scores.items(), key=lambda x: x[1], reverse=True)
+    leaderboard_text = "🌍 **Global Leaderboard:**\n"
+    for rank, (user_id, score) in enumerate(sorted_scores, start=1):
+        leaderboard_text += f"**{rank}.** User {user_id} → {score} points\n"
+
     await message.reply(leaderboard_text)
 
 @app.on_message(filters.command("chatleaderboard"))
 async def chat_leaderboard(client: Client, message: Message):
     chat_id = message.chat.id
-    if chat_id not in group_scores or not group_scores[chat_id]:
+
+    if chat_id not in group_scores or not any(score > 0 for score in group_scores[chat_id].values()):
         await message.reply("No scores recorded in this chat yet.")
         return
-    leaderboard_text = "🏆 Chat Leaderboard:\n" + "\n".join(
-        [f"{user_id}: {score}" for user_id, score in sorted(group_scores[chat_id].items(), key=lambda x: x[1], reverse=True)])
+
+    sorted_scores = sorted(group_scores[chat_id].items(), key=lambda x: x[1], reverse=True)
+    leaderboard_text = "🏆 **Chat Leaderboard:**\n"
+    for rank, (user_id, score) in enumerate(sorted_scores, start=1):
+        leaderboard_text += f"**{rank}.** User {user_id} → {score} points\n"
+
     await message.reply(leaderboard_text)
+
 
 app.run()
