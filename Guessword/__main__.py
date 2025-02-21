@@ -113,9 +113,12 @@ async def show_commands(client, callback_query):
         [InlineKeyboardButton("🔙 Back", callback_data="back_to_start")]
     ]))
 
+
 @app.on_callback_query(filters.regex("^back_to_start$"))
 async def back_to_start(client, callback_query):
-    await start_command(client, callback_query.message)
+    await callback_query.message.delete()  # Delete the previous message
+    await start_command(client, callback_query.message)  # Send a new start message
+
 
 @app.on_message(filters.command("new"))
 async def new_game(client: Client, message: Message):
