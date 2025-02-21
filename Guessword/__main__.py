@@ -91,7 +91,7 @@ async def start_command(client: Client, message: Message):
     buttons = InlineKeyboardMarkup([
         [InlineKeyboardButton("➕ Add to Group", url=f"https://t.me/{client.me.username}?startgroup=true")],
         [InlineKeyboardButton("⚙️ Bot Commands", callback_data="commands"),
-         InlineKeyboardButton("🛡Support chat", url=f"https://t.me/WordMiners"))
+         InlineKeyboardButton("🛡Support chat", url=f"https://t.me/WordMiners")
         ]
     ])
     
