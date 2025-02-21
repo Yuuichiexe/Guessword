@@ -94,7 +94,7 @@ async def start_command(client: Client, message: Message):
     ])
     
     await message.reply_photo(
-        photo="https://files.catbox.moe/x4w7h1.jpg",  # Replace with an actual image URL
+        photo="https://files.catbox.moe/3qhaq0.jpg",  # Replace with an actual image URL
         caption=welcome_text,
         reply_markup=buttons
     )
