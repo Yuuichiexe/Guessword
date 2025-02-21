@@ -97,7 +97,7 @@ async def start_command(client: Client, message: Message):
         photo="https://files.catbox.moe/x4w7h1.jpg",  # Replace with an actual image URL
         caption=welcome_text,
         reply_markup=buttons,
-        parse_mode="html"
+        parse_mode="HTML"
     )
 
 @app.on_callback_query(filters.regex("^commands$"))
