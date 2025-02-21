@@ -99,11 +99,14 @@ async def start_command(client: Client, message: Message):
 @app.on_callback_query(filters.regex("^commands$"))
 async def show_commands(client, callback_query):
     commands_text = (
-        "📜 **Bot Commands:**\n\n"
-        "🎮 /new - Start a new game\n"
-        "📊 /leaderboard - View global leaderboard\n"
-        "🏆 /chatleaderboard - View chat leaderboard\n"
-        "ℹ️ /start - Show this message again\n"
+        "**Word Mine Bot Help**\n\n"
+        "🎮 **Commands:**\n"
+        "- /start - Start the bot and see the welcome message\n"
+        "- /new - Start a new word guessing game\n"
+        "- /end - End the current game\n"
+        "- /leaderboard - View the global leaderboard\n"
+        "- /chatleaderboard - View the chat leaderboard\n"
+        "- /help - Show this help message\n"
     )
     
     await callback_query.message.edit_text(commands_text, reply_markup=InlineKeyboardMarkup([
@@ -198,5 +201,32 @@ async def chat_leaderboard(client: Client, message: Message):
         return
     text = "🏆 Chat Leaderboard:\n" + "\n".join([f"User {user_id} → {score} points" for user_id, score in leaderboard])
     await message.reply(text)
+
+
+@app.on_message(filters.command("end"))
+async def end_game(client: Client, message: Message):
+    chat_id = message.chat.id
+    
+    if chat_id in group_games:
+        del group_games[chat_id]
+        await message.reply("🚫 The game has been ended. Start a new one with /new!")
+    else:
+        await message.reply("⚠️ No active game to end.")
+
+@app.on_message(filters.command("help"))
+async def help_command(client: Client, message: Message):
+    help_text = (
+        "**Word Mine Bot Help**\n\n"
+        "🎮 **Commands:**\n"
+        "- /start - Start the bot and see the welcome message\n"
+        "- /new - Start a new word guessing game\n"
+        "- /end - End the current game\n"
+        "- /leaderboard - View the global leaderboard\n"
+        "- /chatleaderboard - View the chat leaderboard\n"
+        "- /help - Show this help message\n"
+        
+    )
+    await message.reply(help_text)
+    
 
 app.run()
