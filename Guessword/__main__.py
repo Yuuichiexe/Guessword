@@ -96,8 +96,7 @@ async def start_command(client: Client, message: Message):
     await message.reply_photo(
         photo="https://files.catbox.moe/x4w7h1.jpg",  # Replace with an actual image URL
         caption=welcome_text,
-        reply_markup=buttons,
-        parse_mode="ParseMode.HTML"
+        reply_markup=buttons
     )
 
 @app.on_callback_query(filters.regex("^commands$"))
