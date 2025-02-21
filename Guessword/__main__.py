@@ -190,14 +190,23 @@ async def guess_word(client: Client, message: Message):
             f"🌍 Your global rank: **#{user_rank}**"
         )
 
+
 @app.on_message(filters.command("leaderboard"))
 async def leaderboard(client: Client, message: Message):
     leaderboard = get_global_leaderboard()
     if not leaderboard:
         await message.reply("No scores recorded yet.")
         return
-    text = "🌍 Global Leaderboard:\n" + "\n".join([f"User {user_id} → {score} points" for user_id, score in leaderboard])
-    await message.reply(text)
+    
+    leaderboard_text = "🌍 **Global Leaderboard:**\n\n"
+    
+    for rank, (user_id, score) in enumerate(leaderboard, start=1):
+        user = await client.get_users(user_id)  # Fetch user info
+        mention = f"[{user.first_name}](tg://user?id={user.id})"
+        leaderboard_text += f"🏅 **#{rank}** - {mention} → **{score} points**\n"
+    
+    await message.reply(leaderboard_text, parse_mode="markdown")
+
 
 @app.on_message(filters.command("chatleaderboard"))
 async def chat_leaderboard(client: Client, message: Message):
@@ -205,8 +214,15 @@ async def chat_leaderboard(client: Client, message: Message):
     if not leaderboard:
         await message.reply("No scores recorded in this chat yet.")
         return
-    text = "🏆 Chat Leaderboard:\n" + "\n".join([f"User {user_id} → {score} points" for user_id, score in leaderboard])
-    await message.reply(text)
+
+    leaderboard_text = "🏆 **Chat Leaderboard:**\n\n"
+
+    for rank, (user_id, score) in enumerate(leaderboard, start=1):
+        user = await client.get_users(user_id)  # Fetch user info
+        mention = f"[{user.first_name}](tg://user?id={user.id})"
+        leaderboard_text += f"🏅 **#{rank}** - {mention} → **{score} points**\n"
+    
+    await message.reply(leaderboard_text, parse_mode="markdown")
 
 
 @app.on_message(filters.command("end"))
