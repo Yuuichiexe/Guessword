@@ -95,7 +95,6 @@ async def guess_word(client: Client, message: Message):
     mention = f"[{user_name}](tg://user?id={user_id})"
 
     if chat_id not in group_games:
-        await message.reply("No active game. Type /new to start.")
         return
 
     word_to_guess = group_games[chat_id]["word"]
