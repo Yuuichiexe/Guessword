@@ -82,7 +82,7 @@ async def start_command(client: Client, message: Message):
         "<i>- Choose a word length</i>\n"
         "<i>- Guess the word and get results with 🟩🟨🟥</i>\n"
         "<i>- Score points and climb the leaderboard!</i>\n\n"
-        ""
+        "<i>Ready to crush your friends? Bring the battle to your group! ⚔️ Add me and let the word wars begin!</i>"
     )
     
     buttons = InlineKeyboardMarkup([
