@@ -205,7 +205,7 @@ async def leaderboard(client: Client, message: Message):
         mention = f"[{user.first_name}](tg://user?id={user.id})"
         leaderboard_text += f"🏅 **#{rank}** - {mention} → **{score} points**\n"
     
-    await message.reply(leaderboard_text, parse_mode="markdown")
+    await message.reply(leaderboard_text)
 
 
 @app.on_message(filters.command("chatleaderboard"))
@@ -222,7 +222,7 @@ async def chat_leaderboard(client: Client, message: Message):
         mention = f"[{user.first_name}](tg://user?id={user.id})"
         leaderboard_text += f"🏅 **#{rank}** - {mention} → **{score} points**\n"
     
-    await message.reply(leaderboard_text, parse_mode="markdown")
+    await message.reply(leaderboard_text)
 
 
 @app.on_message(filters.command("end"))
