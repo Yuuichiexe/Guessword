@@ -190,7 +190,6 @@ async def guess_word(client: Client, message: Message):
             f"🌍 Your global rank: **#{user_rank}**"
         )
 
-
 @app.on_message(filters.command("leaderboard"))
 async def leaderboard(client: Client, message: Message):
     leaderboard = get_global_leaderboard()
@@ -201,9 +200,13 @@ async def leaderboard(client: Client, message: Message):
     leaderboard_text = "🌍 **Global Leaderboard:**\n\n"
     
     for rank, (user_id, score) in enumerate(leaderboard, start=1):
-        user = await client.get_users(user_id)  # Fetch user info
-        mention = f"[{user.first_name}](tg://user?id={user.id})"
-        leaderboard_text += f"🏅 **#{rank}** - {mention} → **{score} points**\n"
+        try:
+            user = await client.get_users(user_id)  # Fetch user info
+            mention = f"[{user.first_name}](tg://user?id={user.id})"
+        except Exception:  # Handle unknown users
+            mention = f"User {user_id}"
+
+        leaderboard_text += f"🏅 **#{rank}** - {mention} → **{score} POINTS**\n"
     
     await message.reply(leaderboard_text)
 
@@ -218,9 +221,13 @@ async def chat_leaderboard(client: Client, message: Message):
     leaderboard_text = "🏆 **Chat Leaderboard:**\n\n"
 
     for rank, (user_id, score) in enumerate(leaderboard, start=1):
-        user = await client.get_users(user_id)  # Fetch user info
-        mention = f"[{user.first_name}](tg://user?id={user.id})"
-        leaderboard_text += f"🏅 **#{rank}** - {mention} → **{score} points**\n"
+        try:
+            user = await client.get_users(user_id)  # Fetch user info
+            mention = f"[{user.first_name}](tg://user?id={user.id})"
+        except Exception:  # Handle unknown users
+            mention = f"User {user_id}"
+
+        leaderboard_text += f"🏅 **#{rank}** - {mention} → **{score} POINTS**\n"
     
     await message.reply(leaderboard_text)
 
