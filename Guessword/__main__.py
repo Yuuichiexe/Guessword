@@ -97,7 +97,7 @@ async def start_command(client: Client, message: Message):
         photo="https://files.catbox.moe/x4w7h1.jpg",  # Replace with an actual image URL
         caption=welcome_text,
         reply_markup=buttons,
-        parse_mode="Markdown"
+        parse_mode="markdown"
     )
 
 @app.on_callback_query(filters.regex("^commands$"))
@@ -141,7 +141,7 @@ async def select_word_length(client, callback_query):
     
     await callback_query.message.edit_text(f"A new {word_length}-letter game has started! Guess a word.")
 
-@app.on_message(filters.text & ~filters.command(["new", "leaderboard", "chatleaderboard"]))
+@app.on_message(filters.text & ~filters.command(["new", "leaderboard", "chatleaderboard", "end", "help"]))
 async def guess_word(client: Client, message: Message):
     chat_id = message.chat.id
     user_id = message.from_user.id
