@@ -81,8 +81,8 @@ async def start_command(client: Client, message: Message):
     welcome_text = (
         f"<b>Yo, Word miners! {mention} in the house! 🧙‍♂️ Welcome to the ultimate Word Guess Bot showdown!</b>\n\n"
         "<b>🕹️ How to Play:</b>\n"
-        "<u><i>- Start a new game using /new</i>\n"
-        "<u><i>- Choose a word length</i><u>\n"
+        "<u><i>- Start a new game using</u> /new</i>\n"
+        "<u><i>- Choose a word length</i></u>\n"
         "<u><i>- Guess the word and get results with 🟩🟨🟥</i></u>\n"
         "<u><i>- Score points and climb the leaderboard!</i></u>\n\n"
         "<i>Ready to crush your friends? Bring the battle to your group! ⚔️ Add me and let the word wars begin!</i>"
