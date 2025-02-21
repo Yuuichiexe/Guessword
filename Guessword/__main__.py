@@ -73,15 +73,18 @@ def check_guess(guess, word_to_guess):
 
 @app.on_message(filters.command("start"))
 async def start_command(client: Client, message: Message):
+    user_id = message.from_user.id
     user_name = message.from_user.first_name
+    mention = f"[{user_name}](tg://user?id={user_id})"
+
     
     welcome_text = (
-        f"<b>Yo, Word miners! {user_name} in the house! 🧙‍♂️ Welcome to the ultimate Word Guess Bot showdown!</b>\n\n"
+        f"<b>Yo, Word miners! {mention} in the house! 🧙‍♂️ Welcome to the ultimate Word Guess Bot showdown!</b>\n\n"
         "<b>🕹️ How to Play:</b>\n"
-        "<i>- Start a new game using</i> /new\n"
-        "<i>- Choose a word length</i>\n"
-        "<i>- Guess the word and get results with 🟩🟨🟥</i>\n"
-        "<i>- Score points and climb the leaderboard!</i>\n\n"
+        "<u><i>- Start a new game using /new</i>\n"
+        "<u><i>- Choose a word length</i><u>\n"
+        "<u><i>- Guess the word and get results with 🟩🟨🟥</i></u>\n"
+        "<u><i>- Score points and climb the leaderboard!</i></u>\n\n"
         "<i>Ready to crush your friends? Bring the battle to your group! ⚔️ Add me and let the word wars begin!</i>"
     )
     
