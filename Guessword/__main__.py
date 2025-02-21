@@ -76,13 +76,13 @@ async def start_command(client: Client, message: Message):
     user_name = message.from_user.first_name
     
     welcome_text = (
-        f"👋 Hello {user_name}! Welcome to **Word Guess Bot** 🎉\n\n"
-        "🔠 **How to Play:**\n"
-        "1️⃣ Start a new game using /new\n"
-        "2️⃣ Choose a word length\n"
-        "3️⃣ Guess the word and get feedback with 🟩🟨🟥\n"
-        "4️⃣ Score points and climb the leaderboard!\n\n"
-        "🚀 Add me to a group and play with friends!"
+        f"<b>Yo, Word miners! {user_name} in the house! 🧙‍♂️ Welcome to the ultimate Word Guess Bot showdown!</b>\n\n"
+        "<b>🕹️ How to Play:</b>\n"
+        "<i>- Start a new game using</i> /new\n"
+        "<i>- Choose a word length</i>\n"
+        "<i>- Guess the word and get results with 🟩🟨🟥</i>\n"
+        "<i>- Score points and climb the leaderboard!</i>\n\n"
+        ""
     )
     
     buttons = InlineKeyboardMarkup([
@@ -94,6 +94,7 @@ async def start_command(client: Client, message: Message):
         photo="https://files.catbox.moe/x4w7h1.jpg",  # Replace with an actual image URL
         caption=welcome_text,
         reply_markup=buttons
+        parse_mode="Markdown"
     )
 
 @app.on_callback_query(filters.regex("^commands$"))
