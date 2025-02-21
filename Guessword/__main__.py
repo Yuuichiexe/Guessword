@@ -79,7 +79,7 @@ async def start_command(client: Client, message: Message):
 
     
     welcome_text = (
-        f"<b>Yo, Word miners! {mention} in the house! 🧙‍♂️ Welcome to the ultimate Word Guess Bot showdown!</b>\n\n"
+        f"<b>Yo, Word miners! {mention} in the house! 🧙‍♂️ Welcome to the ultimate Word Mine Bot showdown!</b>\n\n"
         "<b>🕹️ How to Play:</b>\n"
         "<u><i>- Start a new game using</u> /new</i>\n"
         "<u><i>- Choose a word length</i></u>\n"
@@ -90,7 +90,9 @@ async def start_command(client: Client, message: Message):
     
     buttons = InlineKeyboardMarkup([
         [InlineKeyboardButton("➕ Add to Group", url=f"https://t.me/{client.me.username}?startgroup=true")],
-        [InlineKeyboardButton("📜 Bot Commands", callback_data="commands")]
+        [InlineKeyboardButton("⚙️ Bot Commands", callback_data="commands"),
+         InlineKeyboardButton("🛡Support chat", url=f"https://t.me/WordMiners"))
+        ]
     ])
     
     await message.reply_photo(
