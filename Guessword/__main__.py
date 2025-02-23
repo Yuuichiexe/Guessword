@@ -38,7 +38,7 @@ API_ID = int(os.getenv("API_ID", "20222660"))
 API_HASH = os.getenv("API_HASH", "5788f1f4a93f2de28835a0cf1b0ebae4")
 BOT_TOKEN = os.getenv("BOT_TOKEN", "7560532835:AAFhlP0P_WCtsbBjwBgQMT7cWU3ht_xE598")
 
-app = Client("word_guess_bot", bot_token=BOT_TOKEN, api_id=API_ID, api_hash=API_HASH)
+app = Client("word_guess", bot_token=BOT_TOKEN, api_id=API_ID, api_hash=API_HASH)
 
 # Start a new game
 def start_new_game(word_length):
