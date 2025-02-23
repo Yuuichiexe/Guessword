@@ -42,3 +42,12 @@ def get_global_leaderboard():
 def get_chat_leaderboard(chat_id):
     cursor.execute("SELECT user_id, score FROM chat_scores WHERE chat_id = ? ORDER BY score DESC LIMIT 10", (chat_id,))
     return cursor.fetchall()
+
+
+app = Client("word_guess_bot", bot_token=, api_id=, api_hash=)
+app.start()
+app.storage.conn.execute("PRAGMA journal_mode=WAL;")
+app.storage.conn.timeout = 30
+app.stop()
+# Now start the bot normally
+app.run()
