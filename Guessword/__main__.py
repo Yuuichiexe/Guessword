@@ -270,9 +270,6 @@ async def help_command(client: Client, message: Message):
     )
     await message.reply(help_text)
     
-with app:
-    app.storage.conn.execute("PRAGMA journal_mode=WAL;")
-    app.storage.conn.timeout = 30
-    app.run()
+app.run()
 
 
