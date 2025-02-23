@@ -45,13 +45,19 @@ def start_new_game(word_length):
     return random.choice(word_lists[word_length])
 
 # Check if a word is valid
+
 def is_valid_english_word(word):
+    """Check if a word is valid using the Datamuse API (with timeout)."""
     try:
-        response = requests.get(f"https://api.datamuse.com/words?sp={word}&max=1")
+        response = requests.get(
+            f"https://api.datamuse.com/words?sp={word}&max=1",
+            timeout=5
+        )
         response.raise_for_status()
         return word in [w["word"] for w in response.json()]
     except requests.RequestException:
         return False
+        
 
 # Check a user's guess
 def check_guess(guess, word_to_guess):
