@@ -44,10 +44,3 @@ def get_chat_leaderboard(chat_id):
     return cursor.fetchall()
 
 
-app = Client("word_guess_bot", bot_token=7560532835:AAFhlP0P_WCtsbBjwBgQMT7cWU3ht_xE598, api_id=20222660, api_hash=5788f1f4a93f2de28835a0cf1b0ebae4)
-app.start()
-app.storage.conn.execute("PRAGMA journal_mode=WAL;")
-app.storage.conn.timeout = 30
-app.stop()
-# Now start the bot normally
-app.run()
