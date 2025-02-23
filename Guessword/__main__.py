@@ -206,8 +206,8 @@ async def guess_word(client: Client, message: Message):
 async def leaderboard(client: Client, message: Message):
     leaderboard = get_global_leaderboard()
     if not leaderboard or not isinstance(leaderboard, list):
-    await message.reply("No scores recorded yet.")
-    return
+        await message.reply("No scores recorded yet.")
+        return
     
     
     leaderboard_text = "🌍 **Global Leaderboard:**\n\n"
@@ -228,8 +228,8 @@ async def leaderboard(client: Client, message: Message):
 async def chat_leaderboard(client: Client, message: Message):
     leaderboard = get_chat_leaderboard(message.chat.id)
     if not leaderboard or not isinstance(leaderboard, list):
-    await message.reply("No scores recorded yet.")
-    return
+        await message.reply("No scores recorded yet.")
+        return
 
     leaderboard_text = "🏆 **Chat Leaderboard:**\n\n"
 
