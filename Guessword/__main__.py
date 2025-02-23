@@ -32,7 +32,7 @@ group_games = {}
 # Bot credentials
 API_ID = int(os.getenv("API_ID", "20222660"))
 API_HASH = os.getenv("API_HASH", "5788f1f4a93f2de28835a0cf1b0ebae4")
-BOT_TOKEN = os.getenv("BOT_TOKEN", "7560532835:AAE5yA7zLwHrkJQK0VYeGeCR-Db6Jhqzvpo")
+BOT_TOKEN = os.getenv("BOT_TOKEN", "7560532835:AAFhlP0P_WCtsbBjwBgQMT7cWU3ht_xE598")
 
 app = Client("word_guess_bot", bot_token=BOT_TOKEN, api_id=API_ID, api_hash=API_HASH)
 
