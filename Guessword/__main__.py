@@ -40,10 +40,6 @@ BOT_TOKEN = os.getenv("BOT_TOKEN", "7560532835:AAFhlP0P_WCtsbBjwBgQMT7cWU3ht_xE5
 
 app = Client("word_guess_bot", bot_token=BOT_TOKEN, api_id=API_ID, api_hash=API_HASH)
 
-app.start()
-app.storage.conn.execute("PRAGMA journal_mode=WAL;")
-app.storage.conn.timeout = 30
-app.stop()
 # Start a new game
 def start_new_game(word_length):
     return random.choice(word_lists[word_length])
@@ -209,9 +205,10 @@ async def guess_word(client: Client, message: Message):
 @app.on_message(filters.command("leaderboard"))
 async def leaderboard(client: Client, message: Message):
     leaderboard = get_global_leaderboard()
-    if not leaderboard:
-        await message.reply("No scores recorded yet.")
-        return
+    if not leaderboard or not isinstance(leaderboard, list):
+    await message.reply("No scores recorded yet.")
+    return
+    
     
     leaderboard_text = "🌍 **Global Leaderboard:**\n\n"
     
@@ -230,9 +227,9 @@ async def leaderboard(client: Client, message: Message):
 @app.on_message(filters.command("chatleaderboard"))
 async def chat_leaderboard(client: Client, message: Message):
     leaderboard = get_chat_leaderboard(message.chat.id)
-    if not leaderboard:
-        await message.reply("No scores recorded in this chat yet.")
-        return
+    if not leaderboard or not isinstance(leaderboard, list):
+    await message.reply("No scores recorded yet.")
+    return
 
     leaderboard_text = "🏆 **Chat Leaderboard:**\n\n"
 
@@ -273,5 +270,9 @@ async def help_command(client: Client, message: Message):
     )
     await message.reply(help_text)
     
+with app:
+    app.storage.conn.execute("PRAGMA journal_mode=WAL;")
+    app.storage.conn.timeout = 30
+    app.run()
 
-app.run()
+
