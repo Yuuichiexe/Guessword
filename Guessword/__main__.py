@@ -40,6 +40,10 @@ BOT_TOKEN = os.getenv("BOT_TOKEN", "7560532835:AAFhlP0P_WCtsbBjwBgQMT7cWU3ht_xE5
 
 app = Client("word_guess_bot", bot_token=BOT_TOKEN, api_id=API_ID, api_hash=API_HASH)
 
+app.start()
+app.storage.conn.execute("PRAGMA journal_mode=WAL;")
+app.storage.conn.timeout = 30
+app.stop()
 # Start a new game
 def start_new_game(word_length):
     return random.choice(word_lists[word_length])
