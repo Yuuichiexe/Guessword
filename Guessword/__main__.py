@@ -13,15 +13,19 @@ fallback_words = {
     7: ["amazing", "thought", "journey", "fantasy"]
 }
 
-# Function to fetch words from Datamuse API
+
 def fetch_words(word_length, max_words=100000):
     try:
-        response = requests.get(f"https://api.datamuse.com/words?sp={'?' * word_length}&max={max_words}")
+        response = requests.get(
+            f"https://api.datamuse.com/words?sp={'?' * word_length}&max=1000",
+            timeout=5
+        )
         response.raise_for_status()
         words = [word["word"] for word in response.json()]
         return words if words else fallback_words[word_length]
     except requests.RequestException:
         return fallback_words[word_length]
+
 
 # Fetch words for different lengths
 word_lists = {length: fetch_words(length) for length in fallback_words}
